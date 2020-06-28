@@ -1,5 +1,5 @@
 # SACNet
-Tensorflow implementation of SACNet: Pulmonary Nodule Segmentation in Computed Tomography via Scale-aware Collaborative Networks, IEEE SIGNAL PROCESSING LETTERS 2020 (In the review)
+Tensorflow implementation of SACNet: Pulmonary Nodule Segmentation in Computed Tomography with Scale-aware Collaborative Networks, IEEE SIGNAL PROCESSING LETTERS 2020 (In the review)
 
 # Requirements
 Please, install the following packages
