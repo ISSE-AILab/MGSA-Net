@@ -63,7 +63,6 @@ def up_sample_concat_block(input,
                         name='deconv'):
     
     padding=padding.upper()
-
     if is_upscale :
 
         size_h = 2 * int(input.get_shape()[-2])
