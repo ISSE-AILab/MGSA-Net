@@ -73,7 +73,6 @@ bbox_data = csvbboxdata.iloc[:, :].values
 assert len(maskdata)==len(imagedata) and len(imagedata)==len(mask_128_data) and len(mask_128_data) == len(image_128_data) and len(image_128_data)== len(bbox_data)
 out=open("./changePath.csv","w")
 out.write("filename,branch1,branch2,branch3,local"+"\n")
-
 for i in tqdm.tqdm(range(len(imagedata))):
     image_path=imagedata[i][0]
     mask_path=maskdata[i][0]
