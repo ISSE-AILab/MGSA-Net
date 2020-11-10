@@ -49,7 +49,6 @@ for i in tqdm.tqdm(range(len(imagedata))):
     img_96_h5.append(img_local)
     mask_96_h5.append(mask_local)
     bbox_h5.append(bbox)
-
 img_256_h5=np.array(img_256_h5)[:,:,:,np.newaxis]
 mask_256_h5=np.array(mask_256_h5)[:,:,:,np.newaxis]
 img_96_h5=np.array(img_96_h5)[:,:,:,np.newaxis]
