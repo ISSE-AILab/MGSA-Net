@@ -13,26 +13,6 @@ def trident_unet(input,input_128,bounding_box,keep_prob=0.5,d1=1,d2=2,d3=3,is_tr
     dilation_rate=[d1,d2,d3]
     init_block=[input,input,input]
 
-    # conv1_out=down_share(init_block,n_channl=64,kernel_size=[2,2],branch_dilation=dilation_rate,is_training=is_training,is_bn=is_bn,share_name='conv1',conv_name='conv_1')
-    # conv2_out=down_share(conv1_out,n_channl=64,kernel_size=[2,2],branch_dilation=dilation_rate,is_training=is_training,is_bn=is_bn,share_name='conv2',conv_name='conv_2')
-    # pool1_out=max_pool_comb(conv2_out)
-
-    # conv3_out=down_share(pool1_out,n_channl=128,kernel_size=[3,3],branch_dilation=dilation_rate,is_training=is_training,is_bn=is_bn,share_name='conv3',conv_name='conv_3')
-    # conv4_out=down_share(conv3_out,n_channl=128,kernel_size=[3,3],branch_dilation=dilation_rate,is_training=is_training,is_bn=is_bn,share_name='conv4',conv_name='conv_4')
-    # pool2_out=max_pool_comb(conv4_out)
-
-    # conv5_out=down_share(pool2_out,n_channl=256,kernel_size=[3,3],branch_dilation=dilation_rate,is_training=is_training,is_bn=is_bn,share_name='conv5',conv_name='conv_5')
-    # conv6_out=down_share(conv5_out,n_channl=256,kernel_size=[3,3],branch_dilation=dilation_rate,is_training=is_training,is_bn=is_bn,share_name='conv6',conv_name='conv_6')
-    # pool3_out=max_pool_comb(conv6_out)
-
-    # conv7_out=down_share(pool3_out,n_channl=512,kernel_size=[3,3],branch_dilation=dilation_rate,is_training=is_training,is_bn=is_bn,share_name='conv7',conv_name='conv_7')
-    # conv8_out=down_share(conv7_out,n_channl=512,kernel_size=[3,3],branch_dilation=dilation_rate,is_training=is_training,is_bn=is_bn,share_name='conv8',conv_name='conv_8')
-    # pool4_out=max_pool_comb(conv8_out)
-
-    # conv9_out=down_share(pool4_out,n_channl=1024,kernel_size=[3,3],branch_dilation=dilation_rate,is_training=is_training,is_bn=is_bn,share_name='conv9',conv_name='conv_9')
-    # conv10_out=down_share(conv9_out,n_channl=1024,kernel_size=[3,3],branch_dilation=dilation_rate,is_training=is_training,is_bn=is_bn,share_name='conv10',conv_name='conv_10')
-    # pool5_out=max_pool_comb(conv10_out)
-
     conv1_out=conv_bn_relu_block(input,n_channl=64,kernel_size=[2,2],is_training=is_training,is_bn=is_bn,name='conv_1')
     conv2_out=conv_bn_relu_block(conv1_out,n_channl=64,kernel_size=[2,2],is_training=is_training,is_bn=is_bn,name='conv_2')
     pool1_out=max_pooling_block(conv2_out)
@@ -109,27 +89,19 @@ def trident_unet(input,input_128,bounding_box,keep_prob=0.5,d1=1,d2=2,d3=3,is_tr
 
     up4=up_sample_concat_block(convU16,convU2,n_channl=64,kernel_size=[2,2],is_training=is_training,is_upscale=is_upscale,is_bn=is_bn,name='du4')
     box_ids = tf.range(0, tf.shape(bounding_box)[0])
-    # crop_img1 = tf.image.crop_and_resize(conv18_out[0], bounding_box, box_ids,crop_size=(128,128),name="crop_image")
+    
     crop_img = tf.image.crop_and_resize(conv18_out[1], bounding_box, box_ids,crop_size=(96,96),name="crop_image")
-    # crop_img3 = tf.image.crop_and_resize(conv18_out[2], bounding_box, box_ids,crop_size=(128,128),name="crop_image")
+    
     conv_comb=tf.concat([up4,crop_img],axis=-1)
 
     convU17=conv_bn_relu_block(conv_comb,n_channl=32,kernel_size=[3,3],is_training=is_training,is_bn=is_bn,name='cu17')
     convU18=conv_bn_relu_block(convU17,n_channl=32,kernel_size=[3,3],is_training=is_training,is_bn=is_bn,name='cu18')
-
-    # conv_comb=tf.concat([conv_comb,crop_img2],axis=-1)
-    # conv_comb=tf.concat([conv_comb,crop_img3],axis=-1)
 
     convU19=conv_bn_relu_block(convU18,n_channl=2,kernel_size=[3,3],is_training=is_training,is_bn=is_bn,name='cu19')
     convU20=conv_bn_relu_block(convU19,n_channl=1,kernel_size=[1,1],activation='sigmoid',is_training=is_training,is_bn=is_bn,name='cu20')
 
     return conv20_out,convU20
 
-# x=tf.placeholder(tf.float32,[None,256,256,1])
-# x_128=tf.placeholder(tf.float32,[None,96,96,1])
-# bbox=tf.placeholder(tf.float32,[None,4])
-# y=trident_unet(x,x_128,bbox)
-# print(y)
 
 def _next_batch(train_images_f, train_labels_f,train_128_images_f,train_128_labels_f,bounding_box_f,batch_size,index_in_epoch):
     start = index_in_epoch
