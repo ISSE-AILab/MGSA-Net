@@ -1,5 +1,5 @@
-# SACNet
-Tensorflow implementation of SACNet: Pulmonary Nodule Segmentation in Computed Tomography with Scale-aware Collaborative Networks, IEEE SIGNAL PROCESSING LETTERS 2020 (under review)
+# MGSANet
+Tensorflow implementation of MGSANet: Multi-Granularity Scale-Aware Networks for Hard Pixels Segmentation of Pulmonary Nodules
 
 # Requirements
 Please, install the following packages
