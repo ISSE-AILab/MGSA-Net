@@ -1,6 +1,5 @@
 import tensorflow as tf
 from layer_factory import conv_bn_relu_block,max_pooling_block,up_sample_concat_block
-
 def down_share(input_list,
             n_channl=8,
             kernel_size=[3,3],
